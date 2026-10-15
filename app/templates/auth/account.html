@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block title %}Your account | ShopSphere{% endblock %}
+{% block content %}<section class="form-card"><h1>Hello, {{ current_user.name }}</h1><p>{{ current_user.email }}</p><p>Your API token is available for local development in your account record.</p></section>{% endblock %}

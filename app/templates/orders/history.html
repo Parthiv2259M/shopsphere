@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block title %}Your orders | ShopSphere{% endblock %}
+{% block content %}<h1>Your orders</h1>{% for order in orders %}<a class="order-row" href="{{ url_for('orders.order_detail', order_id=order.id) }}"><span>Order #{{ order.id }}<small>{{ order.created_at.strftime('%d %b %Y') }}</small></span><span class="status">{{ order.status }}</span><strong>Rs. {{ '%.2f'|format(order.total) }}</strong></a>{% else %}<div class="empty-state"><p>You haven't placed an order yet.</p></div>{% endfor %}{% endblock %}

@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Sign in | ShopSphere{% endblock %}
+{% block content %}<section class="form-card"><p class="eyebrow">Welcome back</p><h1>Sign in</h1>
+<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>Email<input name="email" type="email" required autocomplete="email"></label><label>Password<input name="password" type="password" required autocomplete="current-password"></label><button class="button">Sign in</button></form>
+<p>New to ShopSphere? <a href="{{ url_for('auth.register') }}">Create an account</a></p></section>{% endblock %}

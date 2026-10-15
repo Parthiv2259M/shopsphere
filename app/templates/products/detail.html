@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | ShopSphere{% endblock %}
+{% block content %}
+<div class="detail-layout">
+  <div class="detail-art">{% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<span>{{ product.category.name }}</span>{% endif %}</div>
+  <section class="detail-copy"><p class="eyebrow">{{ product.category.name }}</p><h1>{{ product.name }}</h1><p class="price large">Rs. {{ '%.2f'|format(product.price) }}</p>
+    <p>{{ product.description }}</p><p>{{ product.stock }} available</p>
+    {% if current_user.is_authenticated %}
+    <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" class="buy-row"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="number" name="quantity" min="1" max="{{ product.stock }}" value="1" aria-label="Quantity"><button class="button">Add to cart</button></form>
+    {% else %}<a class="button" href="{{ url_for('auth.login') }}">Sign in to shop</a>{% endif %}
+  </section>
+</div>
+<section class="reviews"><h2>Customer reviews</h2>
+{% if current_user.is_authenticated %}
+<form method="post" action="{{ url_for('orders.add_review', product_id=product.id) }}" class="review-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>Rating <select name="rating">{% for rating in range(5, 0, -1) %}<option value="{{ rating }}">{{ rating }} stars</option>{% endfor %}</select></label>
+  <textarea name="body" maxlength="2000" placeholder="Share your experience"></textarea><button class="button">Submit review</button>
+</form>{% endif %}
+{% for review in reviews %}<article class="review"><strong>{{ review.rating }}/5</strong><p>{{ review.body }}</p></article>{% else %}<p>No reviews yet.</p>{% endfor %}
+</section>
+{% endblock %}

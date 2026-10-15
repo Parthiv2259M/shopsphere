@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Your cart | ShopSphere{% endblock %}
+{% block content %}<h1>Your cart</h1>
+{% if cart.items %}
+<div class="cart-layout"><section>
+{% for item in cart.items %}<article class="cart-item"><div><h2>{{ item.product.name }}</h2><p>Rs. {{ '%.2f'|format(item.product.price) }} each</p></div>
+<form method="post" action="{{ url_for('cart.update_cart_item', item_id=item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="number" name="quantity" min="1" max="{{ item.product.stock }}" value="{{ item.quantity }}"><button class="button secondary">Update</button></form>
+<form method="post" action="{{ url_for('cart.remove_cart_item', item_id=item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link-button danger-text">Remove</button></form></article>{% endfor %}
+<form method="post" action="{{ url_for('cart.apply_coupon') }}" class="coupon-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input name="code" placeholder="Coupon code" value="{{ cart.coupon.code if cart.coupon else '' }}"><button class="button secondary">Apply coupon</button></form>
+{% if cart.coupon %}<form method="post" action="{{ url_for('cart.remove_coupon') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link-button">Remove coupon</button></form>{% endif %}
+</section><aside class="summary"><h2>Order summary</h2><p><span>Subtotal</span><strong>Rs. {{ '%.2f'|format(totals.subtotal) }}</strong></p><p><span>Discount</span><strong>- Rs. {{ '%.2f'|format(totals.discount) }}</strong></p><p><span>GST (18%)</span><strong>Rs. {{ '%.2f'|format(totals.tax) }}</strong></p><p><span>Shipping</span><strong>Rs. {{ '%.2f'|format(totals.shipping) }}</strong></p><p class="total"><span>Total</span><strong>Rs. {{ '%.2f'|format(totals.total) }}</strong></p><form method="post" action="{{ url_for('orders.checkout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button full">Place order</button></form></aside></div>
+{% else %}<div class="empty-state"><h2>Your cart is waiting</h2><p>Find something special in our collection.</p><a class="button" href="{{ url_for('products.list_products') }}">Explore products</a></div>{% endif %}
+{% endblock %}

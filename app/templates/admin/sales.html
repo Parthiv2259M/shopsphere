@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block title %}Sales report | Admin | ShopSphere{% endblock %}
+{% block content %}<h1>Sales report</h1>{% for row in rows %}<p class="order-row"><span>{{ row.day }}</span><strong>Rs. {{ '%.2f'|format(row.sales) }}</strong></p>{% else %}<p>No sales recorded yet.</p>{% endfor %}{% endblock %}

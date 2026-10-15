@@ -1,0 +1,1 @@
+"""ShopSphere automated test suite."""
